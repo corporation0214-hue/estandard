@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 const DEFAULT_BG = "https://images.unsplash.com/photo-1454165205744-3b78555e5572?w=800&q=80&auto=format&fit=crop";
 
@@ -12,6 +13,7 @@ export function SurpriseSpotlight() {
   const [bgImage, setBgImage] = useState(DEFAULT_BG);
   const [bgInput, setBgInput] = useState("");
   const [showBgSettings, setShowBgSettings] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,6 +28,21 @@ export function SurpriseSpotlight() {
       setBgImage(saved);
       setBgInput(saved);
     }
+    // Admin check — Supabase session
+    const supa = createClient();
+    supa.auth.getSession().then(({ data }) => {
+      if (!data.session) return;
+      // Any logged-in user is admin for MVP; production: check profiles.role === 'admin'
+      setIsAdmin(true);
+      supa
+        .from("profiles")
+        .select("role")
+        .eq("id", data.session.user.id)
+        .single()
+        .then(({ data: p }) => {
+          if (p?.role === "admin") setIsAdmin(true);
+        });
+    });
   }, []);
 
   useEffect(() => {
@@ -157,26 +174,32 @@ export function SurpriseSpotlight() {
               БАЯР ХҮРГЭЕ!
             </h4>
             <p className="mt-3 max-w-sm text-sm leading-6 text-slate-200">estandard.mn — таны байгууллага ISO нэгдсэн удирдлагын тогтолцоонд нэг алхам ойртлоо. Итгэл, чанар, тогтвортой хөгжил!</p>
-            <div className="mt-4 flex gap-2 text-xs">
+            <div className="mt-4 flex flex-wrap justify-center gap-1.5 text-xs">
               <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
-              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">14001</span>
-              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">45001</span>
+              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 14001</span>
+              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 45001</span>
+              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur border border-[var(--royal-gold)]/40">ISO 19011</span>
             </div>
           </div>
           {/* Close X */}
           <button onClick={() => setFlashOpen(false)} className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur hover:bg-black/60 transition">✕</button>
 
-          {/* Background image settings */}
+          {/* Background image settings — admin only */}
           <div className="absolute bottom-0 left-0 right-0 border-t bg-card/95 p-3 backdrop-blur">
-            {!showBgSettings ? (
+            {!isAdmin ? (
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-medium">🖼 Арын зураг</span>
+                <span className="text-xs text-muted-foreground">🔒 Арын зураг — админ эрх шаардлагатай</span>
+                <Link href="/login" className="rounded-full royal-gradient px-3 py-1 text-xs font-semibold text-white">Нэвтрэх →</Link>
+              </div>
+            ) : !showBgSettings ? (
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-medium">🖼 Арын зураг • Админ</span>
                 <button onClick={() => setShowBgSettings(true)} className="rounded-full border bg-card px-3 py-1 text-xs hover:bg-muted">Солих ⚙</button>
               </div>
             ) : (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold">Зураг тохируулах</span>
+                  <span className="text-xs font-semibold">Зураг тохируулах (админ)</span>
                   <button onClick={() => setShowBgSettings(false)} className="text-xs text-muted-foreground hover:text-foreground">✕ хаах</button>
                 </div>
                 <div className="flex gap-2">
@@ -226,7 +249,7 @@ export function SurpriseSpotlight() {
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => { setBgImage(DEFAULT_BG); setBgInput(DEFAULT_BG); localStorage.removeItem("estandard-flash-bg"); }} className="text-xs text-muted-foreground hover:text-foreground">Анхны болгох</button>
-                  <span className="text-xs text-muted-foreground">• Зураг томрохдоо 0%→100%, хураагдахдаа 100%→0% smooth</span>
+                  <span className="text-xs text-muted-foreground">• Админ горим • localStorage хадгалагдана</span>
                 </div>
               </div>
             )}
