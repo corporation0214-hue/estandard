@@ -16,6 +16,9 @@ export default function LoginPage() {
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlError = params.get("error_description") || params.get("error");
+    if (urlError) setErr(decodeURIComponent(urlError.replace(/\+/g, " ")) + " — Дахин сэргээх холбоос илгээнэ үү (1 цаг хүчинтэй, 1 удаа).");
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) router.replace("/dashboard");
     });

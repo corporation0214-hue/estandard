@@ -16,13 +16,24 @@ export default function ResetPasswordPage() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Check if we have a session (invite/recovery link exchanged)
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setReady(true);
-      else setErr("Холбоос хүчингүй эсвэл хугацаа дууссан. Дахин сэргээх имэйл илгээнэ үү.");
-    });
+    // Handle hash fragment (#access_token=...) and code exchange
+    const hash = window.location.hash;
+    if (hash && hash.includes("access_token")) {
+      // Supabase JS will auto-detect session from hash
+      setTimeout(() => supabase.auth.getSession().then(({ data }) => {
+        if (data.session) setReady(true);
+      }), 500);
+    } else {
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session) setReady(true);
+        else setErr("Холбоос хүчингүй эсвэл хугацаа дууссан. /login дээр Дахин сэргээх дарж шинэ холбоос аваарай. Холбоос 1 цаг хүчинтэй, 1 удаа л ашиглагдана.");
+      });
+    }
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (session) setReady(true);
+      if (session) {
+        setReady(true);
+        setErr(null);
+      }
     });
     return () => sub.subscription.unsubscribe();
   }, [supabase]);

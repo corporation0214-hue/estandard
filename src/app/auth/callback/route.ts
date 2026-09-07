@@ -6,6 +6,15 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/reset-password";
+  const error = searchParams.get("error");
+  const errorDesc = searchParams.get("error_description");
+
+  // Supabase sends ?error=access_denied&error_code=otp_expired when link invalid/expired
+  if (error) {
+    return NextResponse.redirect(
+      `${origin}/login?error=${encodeURIComponent(errorDesc || error)}`
+    );
+  }
 
   if (code) {
     const cookieStore = await cookies();
@@ -23,10 +32,12 @@ export async function GET(request: Request) {
         },
       }
     );
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
+    const { error: exError } = await supabase.auth.exchangeCodeForSession(code);
+    if (!exError) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(exError.message)}`);
   }
-  return NextResponse.redirect(`${origin}/login?error=callback_failed`);
+  // Some flows use hash fragment (#access_token) — handled client-side in /reset-password
+  return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent("Холбоос хүчингүй эсвэл хугацаа дууссан. Дахин сэргээх илгээнэ үү.")}`);
 }
