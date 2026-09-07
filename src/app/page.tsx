@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { STANDARDS, IMS_BENEFITS } from "@/lib/standards";
 import { Donut, BarChart } from "@/components/Charts";
+import { SurpriseSpotlight, HoverPeek } from "@/components/MarketingHover";
 
 export default function Home() {
   return (
@@ -89,19 +90,22 @@ export default function Home() {
         </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {STANDARDS.map((s) => (
-            <Link key={s.id} href={`/standards/${s.id}`} className="group rounded-2xl border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-              <div className="flex items-center gap-3">
-                <div className={`flex h-9 w-9 items-center justify-center rounded-xl text-white shadow ${s.color} text-sm`}>{s.icon}</div>
-                <div className="text-xs font-medium text-muted-foreground">{s.code}</div>
-              </div>
-              <div className="mt-3 text-sm font-semibold">{s.nameMn}</div>
-              <div className="text-xs text-muted-foreground">{s.name}</div>
-              <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{s.description}</p>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs font-medium text-[var(--royal)] group-hover:underline dark:text-[var(--royal-gold)]">Дэлгэрэнгүй → {s.clauses} бүлэг</span>
-                <span className="h-1.5 w-16 rounded-full bg-muted"><span className="block h-1.5 rounded-full gold-gradient" style={{ width: `${60 + Math.floor(Math.random()*35)}%` }} /></span>
-              </div>
-            </Link>
+            <HoverPeek key={s.id} peek={`✦ ${s.code} — Hover → GAP үнэлгээ шууд!`}>
+              <Link href={`/standards/${s.id}`} className="group block rounded-2xl border bg-card p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:border-[var(--royal-gold)]/30">
+                <div className="flex items-center gap-3">
+                  <div className={`flex h-9 w-9 items-center justify-center rounded-xl text-white shadow ${s.color} text-sm transition group-hover:scale-110`}>{s.icon}</div>
+                  <div className="text-xs font-medium text-muted-foreground">{s.code}</div>
+                  <span className="ml-auto rounded-full bg-[var(--royal-gold-light)] px-2 py-0.5 text-[10px] font-bold text-[var(--royal)] opacity-0 transition group-hover:opacity-100">Hover ✨</span>
+                </div>
+                <div className="mt-3 text-sm font-semibold">{s.nameMn}</div>
+                <div className="text-xs text-muted-foreground">{s.name}</div>
+                <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{s.description}</p>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-xs font-medium text-[var(--royal)] group-hover:underline dark:text-[var(--royal-gold)]">Дэлгэрэнгүй → {s.clauses} бүлэг</span>
+                  <span className="h-1.5 w-16 rounded-full bg-muted"><span className="block h-1.5 rounded-full gold-gradient transition-all group-hover:w-full" style={{ width: `${60 + Math.floor(Math.random()*35)}%` }} /></span>
+                </div>
+              </Link>
+            </HoverPeek>
           ))}
         </div>
       </section>
@@ -156,6 +160,7 @@ export default function Home() {
         </div>
       </section>
 
+      <SurpriseSpotlight />
       <Footer />
     </div>
   );
