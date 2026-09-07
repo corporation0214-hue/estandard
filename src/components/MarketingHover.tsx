@@ -244,9 +244,9 @@ export function SurpriseSpotlight() {
           {/* Background image */}
           <img alt="promo bg" src={bgImage} className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--royal)]/90 via-[var(--royal)]/60 to-[var(--royal)]/20" />
-          {/* Content */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white">
-            <div className="flex flex-col items-center justify-center">
+          {/* Content — bottom of image, main content uncovered */}
+          <div className="absolute inset-0 flex flex-col items-center justify-end p-6 pb-5 text-center text-white">
+            <div className="flex flex-col items-center justify-end">
               <div className="flex flex-wrap justify-center gap-1.5 text-xs">
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 14001</span>
