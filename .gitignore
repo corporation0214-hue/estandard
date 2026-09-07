@@ -43,3 +43,4 @@ next-env.d.ts
 # secrets
 github token.txt
 *token*.txt
+.vercel
