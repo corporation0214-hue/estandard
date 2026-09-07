@@ -230,21 +230,23 @@ export function SurpriseSpotlight() {
           className={`absolute inset-0 bg-[var(--royal)]/50 backdrop-blur-sm transition-opacity duration-500 ease-out ${flashOpen ? "opacity-100" : "opacity-0"}`}
         />
         <div
-          className={`relative overflow-hidden rounded-2xl border shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${flashOpen ? "w-[92vw] max-w-[560px] h-[360px] md:h-[440px] scale-100 opacity-100" : "w-[92vw] max-w-[560px] h-[360px] md:h-[440px] scale-0 opacity-0"}`}
+          className={`relative flex flex-col items-center transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${flashOpen ? "scale-100 opacity-100" : "scale-0 opacity-0"}`}
           style={{ transformOrigin: "calc(50% + 40vw - 80px) calc(50% + 40vh - 80px)" }}
         >
+          {/* Title — outside & above the image edge */}
+          <h4
+            className="mb-3 bg-gradient-to-r from-[var(--royal-gold)] via-[#fff8d6] to-[var(--royal-gold)] bg-clip-text px-4 text-center text-3xl font-black tracking-tight text-transparent drop-shadow-[0_0_18px_rgba(197,164,106,0.8)] md:text-4xl"
+            style={{ backgroundSize: "200% 100%", animation: "goldShimmer 2s linear infinite, vividPulse 1.2s ease-in-out infinite" }}
+          >
+            БАЯР ХҮРГЭЕ!
+          </h4>
+          <div className="relative w-[92vw] max-w-[560px] h-[360px] md:h-[440px] overflow-hidden rounded-2xl border shadow-2xl">
           {/* Background image */}
           <img alt="promo bg" src={bgImage} className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--royal)]/90 via-[var(--royal)]/60 to-[var(--royal)]/20" />
-          {/* Content — vivid dynamic, title at top */}
-          <div className="absolute inset-0 flex flex-col items-center p-6 pt-12 text-center text-white">
-            <h4
-              className="bg-gradient-to-r from-[var(--royal-gold)] via-[#fff8d6] to-[var(--royal-gold)] bg-clip-text text-3xl font-black tracking-tight text-transparent drop-shadow-[0_0_18px_rgba(197,164,106,0.8)] md:text-4xl"
-              style={{ backgroundSize: "200% 100%", animation: "goldShimmer 2s linear infinite, vividPulse 1.2s ease-in-out infinite" }}
-            >
-              БАЯР ХҮРГЭЕ!
-            </h4>
-            <div className="flex flex-1 flex-col items-center justify-center">
+          {/* Content */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white">
+            <div className="flex flex-col items-center justify-center">
               <p className="max-w-sm text-sm leading-6 text-slate-200">estandard.mn — таны байгууллага ISO нэгдсэн удирдлагын тогтолцоонд нэг алхам ойртлоо. Итгэл, чанар, тогтвортой хөгжил!</p>
               <div className="mt-4 flex flex-wrap justify-center gap-1.5 text-xs">
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
@@ -257,14 +259,10 @@ export function SurpriseSpotlight() {
           {/* Close X */}
           <button onClick={() => setFlashOpen(false)} className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur hover:bg-black/60 transition">✕</button>
 
-          {/* Background image settings — admin only */}
+          {/* Background image settings — admin only (public-д огт харагдахгүй) */}
+          {isAdmin && (
           <div className="absolute bottom-0 left-0 right-0 border-t bg-card/95 p-3 backdrop-blur">
-            {!isAdmin ? (
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-xs text-muted-foreground">🔒 Арын зураг — админ эрх шаардлагатай</span>
-                <Link href="/login" className="rounded-full royal-gradient px-3 py-1 text-xs font-semibold text-white">Нэвтрэх →</Link>
-              </div>
-            ) : !showBgSettings ? (
+            {!showBgSettings ? (
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs font-medium">🖼 Арын зураг • Админ</span>
                 <button onClick={() => setShowBgSettings(true)} className="rounded-full border bg-card px-3 py-1 text-xs hover:bg-muted">Солих ⚙</button>
@@ -329,6 +327,8 @@ export function SurpriseSpotlight() {
                 </div>
               </div>
             )}
+          </div>
+          )}
           </div>
         </div>
       </div>
