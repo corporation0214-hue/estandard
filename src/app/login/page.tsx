@@ -82,7 +82,7 @@ export default function LoginPage() {
           <div className="mx-auto h-1 w-12 rounded-full gold-gradient" />
           <h1 className="mt-4 text-center text-xl font-bold">{mode === "login" ? "Нэвтрэх" : "Бүртгүүлэх"}</h1>
           <p className="mt-2 text-center text-xs leading-5 text-muted-foreground">
-            {mode === "login" ? "Админ эрхээр нэвтэрч зураг солих тохиргоог удирдана." : "Шинэ хаяг үүсгэх — дараа нь Supabase Dashboard-д админ болгоно."}
+            {mode === "login" ? "Админ эрхээр нэвтэрч зураг солих тохиргоог удирдана." : "Шинэ хаяг үүсгэх — нэвтэрсний дараа админ эрх олгогдоно."}
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -130,13 +130,9 @@ export default function LoginPage() {
             <Link href="/dashboard" className="text-muted-foreground hover:text-foreground">Самбар →</Link>
           </div>
 
-          <div className="mt-6 rounded-xl border bg-muted p-3 text-xs leading-5 text-muted-foreground">
-            <b>Админ болгох:</b> Supabase Dashboard → Authentication → Users → хэрэглэгч → `profiles` хүснэгтэд `role='admin'` болгох, эсвэл дараах SQL:<br />
-            <code className="mt-1 block rounded bg-card px-2 py-1 text-[11px]">update profiles set role='admin' where id = (select id from auth.users where email='admin@estandard.mn');</code>
-          </div>
         </div>
 
-        <div className="mt-6 text-center text-xs text-muted-foreground">Dark/Light • Royal • Responsive • Supabase Auth</div>
+        <div className="mt-6 text-center text-xs text-muted-foreground">Royal • Responsive • Аюулгүй нэвтрэлт</div>
       </main>
     </div>
   );

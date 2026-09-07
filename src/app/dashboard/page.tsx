@@ -13,7 +13,7 @@ export default function DashboardPage() {
               <span className="h-2 w-2 rounded-full bg-emerald-500" /> IMS • Royal Classic
             </div>
             <h1 className="mt-3 text-xl font-bold md:text-2xl">Хяналтын самбар</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Байгууллагын нэгдсэн удирдлагын тогтолцооны төлөв — responsive, dark/light, dynamic charts</p>
+            <p className="mt-1 text-sm text-muted-foreground">Байгууллагын нэгдсэн удирдлагын тогтолцооны төлөв</p>
           </div>
           <div className="flex gap-2">
             <button className="rounded-full border bg-card px-4 py-2 text-sm hover:bg-muted">Тайлан PDF</button>
@@ -49,6 +49,9 @@ export default function DashboardPage() {
               <Donut value={72} label="9001" sub="Чанар" />
               <Donut value={58} label="14001" sub="Байгаль" />
               <Donut value={65} label="45001" sub="ХАБ" />
+              <Donut value={52} label="27001" sub="Мэдээлэл" />
+              <Donut value={60} label="31000" sub="Эрсдэл" />
+              <Donut value={55} label="19011" sub="Аудит" />
             </div>
             <div className="mt-8">
               <BarChart data={[
@@ -56,10 +59,12 @@ export default function DashboardPage() {
                 { label: "ISO 14001 — Байгаль", value: 58 },
                 { label: "ISO 45001 — ХАБ", value: 65 },
                 { label: "ISO 27001 — Мэдээлэл", value: 52 },
+                { label: "ISO 31000 — Эрсдэл", value: 60 },
+                { label: "ISO 19011 — Аудит", value: 55 },
               ]} />
             </div>
             <div className="mt-6 flex flex-wrap gap-2">
-              {STANDARDS.slice(0,5).map((s) => (
+              {STANDARDS.map((s) => (
                 <Link key={s.id} href={`/standards/${s.id}`} className="rounded-full border bg-card px-3 py-1 text-xs hover:bg-muted">{s.code} →</Link>
               ))}
             </div>
@@ -115,7 +120,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="mt-6 rounded-xl border bg-card p-4 text-center text-xs text-muted-foreground">Desktop 1280px • Tablet 768px • Phone 375px — бүгдэд туршигдсан • Sidebar collapse/expand • Dark/Light</div>
+        <div className="mt-6 rounded-xl border bg-card p-4 text-center text-xs text-muted-foreground">Утас • Таблет • Компьютер — бүгдэд туршигдсан</div>
       </main>
     </AppShell>
   );

@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { ThemeToggle } from "./ThemeToggle";
 
 type NavItem = {
@@ -23,6 +24,7 @@ const NAV: NavItem[] = [
       { label: "ISO 45001 — ХАБ", href: "/standards/iso45001" },
       { label: "ISO 27001 — Мэдээлэл", href: "/standards/iso27001" },
       { label: "ISO 31000 — Эрсдэл", href: "/standards/iso31000" },
+      { label: "ISO 19011 — Аудит", href: "/standards/iso19011" },
     ],
   },
   {
@@ -125,6 +127,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     Стандартууд: true,
     Удирдлага: true,
   });
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const supa = createClient();
+    supa.auth.getSession().then(({ data }) => setLoggedIn(!!data.session));
+    const { data: sub } = supa.auth.onAuthStateChange((_e, session) => setLoggedIn(!!session));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  async function handleLogout() {
+    const supa = createClient();
+    await supa.auth.signOut();
+    window.location.href = "/";
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -185,9 +201,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <div className="h-1.5 w-[72%] rounded-full gold-gradient" />
             </div>
           </div>
+          {loggedIn && (
+            <button
+              onClick={handleLogout}
+              className={`mt-3 flex w-full items-center justify-center gap-2 rounded-xl border bg-card px-3 py-2 text-xs font-medium hover:bg-muted ${collapsed ? "px-0" : ""}`}
+              title="Гарах"
+            >
+              <span>⏻</span>
+              {!collapsed && <span>Гарах</span>}
+            </button>
+          )}
           <div className="mt-3 flex items-center justify-between">
             <span className={`text-xs text-muted-foreground ${collapsed ? "hidden" : ""}`}>
-              v1.0 • Supabase
+              v1.0 • IMS
             </span>
             <ThemeToggle />
           </div>
@@ -204,6 +230,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="text-xs font-bold">ESTANDARD.MN</span>
           </Link>
           <div className="flex items-center gap-2">
+            {loggedIn && (
+              <button
+                onClick={handleLogout}
+                className="inline-flex h-8 items-center rounded-lg border bg-card px-3 text-xs font-medium"
+              >
+                Гарах
+              </button>
+            )}
             <ThemeToggle />
             <button
               onClick={() => setMobileOpen((v) => !v)}

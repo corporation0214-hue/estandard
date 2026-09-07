@@ -27,17 +27,17 @@ export default function Home() {
                 тогтолцоог цахимаар
               </h1>
               <p className="mt-4 max-w-xl text-sm leading-6 text-slate-300 md:text-[15px] md:leading-7">
-                <strong className="font-semibold text-white">estandard.mn</strong> — ISO 9001, 14001, 45001, 27001, 31000-ыг нэг дор нэвтрүүлэх Royal Classic платформ. GAP, баримт бичиг, эрсдэл, аудитыг итгэлтэй удирдаарай.
+                <strong className="font-semibold text-white">estandard.mn</strong> — ISO 9001, 14001, 45001, 27001, 31000, 19011-ыг нэг дор нэвтрүүлэх Royal Classic платформ. GAP, баримт бичиг, эрсдэл, аудитыг итгэлтэй удирдаарай.
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link href="/dashboard" className="inline-flex justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--royal)] shadow hover:bg-slate-100">Үнэгүй эхлэх →</Link>
                 <a href="#standards" className="inline-flex justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur hover:bg-white/10">Стандартууд танилцах</a>
               </div>
               <div className="mt-6 flex flex-wrap gap-3 text-xs text-slate-400">
-                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">✓ Supabase</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">✓ Vercel</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">✓ 6 ISO стандарт</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">✓ GAP шинжилгээ</span>
                 <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">✓ Responsive</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">✓ Dark/Light</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">✓ Аудит & CAPA</span>
               </div>
             </div>
 
@@ -66,12 +66,18 @@ export default function Home() {
                   <Donut value={78} label="9001" sub="Чанар" />
                   <Donut value={65} label="45001" sub="ХАБ" />
                   <Donut value={58} label="14001" sub="Байгаль" />
+                  <Donut value={52} label="27001" sub="Мэдээлэл" />
+                  <Donut value={60} label="31000" sub="Эрсдэл" />
+                  <Donut value={55} label="19011" sub="Аудит" />
                 </div>
                 <div className="mt-6">
                   <BarChart data={[
                     { label: "ISO 9001 — Чанар", value: 78 },
                     { label: "ISO 45001 — ХАБ", value: 65 },
                     { label: "ISO 14001 — Байгаль", value: 58 },
+                    { label: "ISO 27001 — Мэдээлэл", value: 52 },
+                    { label: "ISO 31000 — Эрсдэл", value: 60 },
+                    { label: "ISO 19011 — Аудит", value: 55 },
                   ]} />
                 </div>
               </div>
@@ -154,7 +160,7 @@ export default function Home() {
         <div className="rounded-2xl royal-gradient p-6 text-white shadow-xl md:flex md:items-center md:justify-between md:p-8">
           <div>
             <h3 className="text-lg font-bold">Байгууллагадаа ISO нэвтрүүлэхэд бэлэн үү?</h3>
-            <p className="mt-2 max-w-xl text-sm text-slate-300">Responsive • Dark/Light • Collapsible sidebar • Royal charts — бүх төхөөрөмжид бэлэн.</p>
+            <p className="mt-2 max-w-xl text-sm text-slate-300">Утас • Таблет • Компьютер — бүх төхөөрөмжид бэлэн.</p>
           </div>
           <Link href="/dashboard" className="mt-4 inline-flex justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--royal)] hover:bg-slate-100 md:mt-0">Бүртгүүлэх — үнэгүй</Link>
         </div>

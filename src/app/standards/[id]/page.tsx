@@ -51,7 +51,7 @@ export default async function StandardDetail({ params }: { params: Promise<{ id:
                 </div>
               ))}
             </div>
-            <button className="mt-6 rounded-full royal-gradient px-5 py-2.5 text-sm font-medium text-white hover:opacity-90">Үнэлгээ хадгалах (Supabase)</button>
+            <button className="mt-6 rounded-full royal-gradient px-5 py-2.5 text-sm font-medium text-white hover:opacity-90">Үнэлгээ хадгалах</button>
           </div>
           <div className="rounded-2xl border bg-card p-5">
             <h3 className="text-sm font-semibold">Шаардлагатай баримт бичиг</h3>

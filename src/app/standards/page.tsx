@@ -28,7 +28,7 @@ export default function StandardsPage() {
       <main className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10">
         <h1 className="text-xl font-bold md:text-2xl">Стандартууд</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-          ISO Annex SL бүтэц — бүлэг тус бүрийн шаардлага, GAP үнэлгээ. Dark/Light бүх хуудсанд идэвхтэй.
+          ISO Annex SL бүтэц — бүлэг тус бүрийн шаардлага, GAP үнэлгээ. Бүх хуудсанд идэвхтэй.
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {STANDARDS.map((s) => (

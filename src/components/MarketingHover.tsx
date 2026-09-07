@@ -105,7 +105,7 @@ export function SurpriseSpotlight() {
       setBgStatus("✓ Нийтэд хадгалагдлаа — бүх зочинд харагдана");
     } catch (e) {
       setBgStatus(
-        "⚠ Зөвхөн энэ browser-д хадгалагдлаа (Supabase бичилт амжилтгүй: " +
+        "⚠ Зөвхөн энэ browser-д хадгалагдлаа (серверт хадгалалт амжилтгүй: " +
           (e instanceof Error ? e.message : "алдаа") +
           "). SQL migration ажиллуулсан эсэхийг шалгана уу."
       );
@@ -252,6 +252,8 @@ export function SurpriseSpotlight() {
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 14001</span>
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 45001</span>
+                <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 27001</span>
+                <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 31000</span>
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur border border-[var(--royal-gold)]/40">ISO 19011</span>
               </div>
             </div>
@@ -323,7 +325,7 @@ export function SurpriseSpotlight() {
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => applyBg(DEFAULT_BG)} disabled={bgSaving} className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-50">Анхны болгох</button>
-                  <span className="text-xs text-muted-foreground">• Админ горим • Supabase нийтэд хадгалагдана</span>
+                  <span className="text-xs text-muted-foreground">• Админ горим • Нийтэд хадгалагдана</span>
                 </div>
               </div>
             )}

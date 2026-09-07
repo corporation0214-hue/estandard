@@ -6,7 +6,7 @@ export function Footer() {
           <div>
             <div className="text-sm font-bold text-white">ESTANDARD.MN</div>
             <div className="mt-1 text-xs text-[var(--royal-gold)]">Royal IMS • Since 2026</div>
-            <p className="mt-3 text-xs leading-5 text-slate-400">ISO 9001 • 14001 • 45001 • 27001 • 31000 — нэгдсэн платформ</p>
+            <p className="mt-3 text-xs leading-5 text-slate-400">ISO 9001 • 14001 • 45001 • 27001 • 31000 • 19011 — нэгдсэн платформ</p>
           </div>
           <div>
             <div className="text-xs font-semibold text-white">Стандартууд</div>
@@ -15,6 +15,8 @@ export function Footer() {
               <li>ISO 14001:2015 — Байгаль</li>
               <li>ISO 45001:2018 — ХАБ</li>
               <li>ISO 27001:2022 — Мэдээлэл</li>
+              <li>ISO 31000:2018 — Эрсдэл</li>
+              <li>ISO 19011:2018 — Аудит</li>
             </ul>
           </div>
           <div>
@@ -22,7 +24,7 @@ export function Footer() {
             <ul className="mt-3 space-y-1.5 text-xs text-slate-400">
               <li>GAP • Баримт • Эрсдэл</li>
               <li>Аудит • CAPA • KPI</li>
-              <li>Supabase • Vercel • Next.js</li>
+              <li>Нэгдсэн удирдлага • PDCA • IMS</li>
             </ul>
           </div>
           <div>
@@ -33,7 +35,7 @@ export function Footer() {
         </div>
         <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-4 text-[11px] text-slate-500 md:flex-row md:justify-between">
           <span>© 2026 estandard.mn — Итгэл • Чанар • Тогтвортой хөгжил</span>
-          <span>Dark/Light • Responsive • Royal Classic</span>
+          <span>Responsive • Royal Classic</span>
         </div>
       </div>
     </footer>
