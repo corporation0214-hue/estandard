@@ -14,6 +14,8 @@ export function SurpriseSpotlight() {
   const [bgInput, setBgInput] = useState("");
   const [showBgSettings, setShowBgSettings] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [bgSaving, setBgSaving] = useState(false);
+  const [bgStatus, setBgStatus] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,13 +25,28 @@ export function SurpriseSpotlight() {
   }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem("estandard-flash-bg");
-    if (saved) {
-      setBgImage(saved);
-      setBgInput(saved);
-    }
-    // Admin check — Supabase session
     const supa = createClient();
+    // 1) Public shared value — Supabase (бүх зочинд ижил харагдана)
+    supa
+      .from("site_settings")
+      .select("value")
+      .eq("key", "flash_bg")
+      .single()
+      .then(({ data }) => {
+        if (data?.value) {
+          setBgImage(data.value);
+          setBgInput(data.value);
+          localStorage.setItem("estandard-flash-bg", data.value);
+        } else {
+          // Fallback: local cache (Supabase хоосон/алдаатай үед)
+          const saved = localStorage.getItem("estandard-flash-bg");
+          if (saved) {
+            setBgImage(saved);
+            setBgInput(saved);
+          }
+        }
+      });
+    // Admin check — Supabase session
     supa.auth.getSession().then(({ data }) => {
       if (!data.session) return;
       // Any logged-in user is admin for MVP; production: check profiles.role === 'admin'
@@ -72,10 +89,64 @@ export function SurpriseSpotlight() {
     setExpanded(false);
   }
 
-  function applyBg(url: string) {
-    if (!url.trim()) return;
-    setBgImage(url.trim());
-    localStorage.setItem("estandard-flash-bg", url.trim());
+  async function applyBg(url: string) {
+    const clean = url.trim();
+    if (!clean) return;
+    setBgSaving(true);
+    setBgStatus(null);
+    setBgImage(clean);
+    localStorage.setItem("estandard-flash-bg", clean);
+    try {
+      const supa = createClient();
+      const { error } = await supa
+        .from("site_settings")
+        .upsert({ key: "flash_bg", value: clean }, { onConflict: "key" });
+      if (error) throw error;
+      setBgStatus("✓ Нийтэд хадгалагдлаа — бүх зочинд харагдана");
+    } catch (e) {
+      setBgStatus(
+        "⚠ Зөвхөн энэ browser-д хадгалагдлаа (Supabase бичилт амжилтгүй: " +
+          (e instanceof Error ? e.message : "алдаа") +
+          "). SQL migration ажиллуулсан эсэхийг шалгана уу."
+      );
+    } finally {
+      setBgSaving(false);
+    }
+  }
+
+  async function handleFileUpload(file: File) {
+    setBgSaving(true);
+    setBgStatus(null);
+    try {
+      const supa = createClient();
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `flash-bg-${Date.now()}.${ext}`;
+      const { error: upError } = await supa.storage.from("marketing").upload(path, file, {
+        upsert: true,
+        contentType: file.type,
+      });
+      if (upError) throw upError;
+      const { data } = supa.storage.from("marketing").getPublicUrl(path);
+      await applyBg(data.publicUrl);
+    } catch (e) {
+      // Fallback: local data URL (зөвхөн энэ browser-д харагдана)
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const dataUrl = reader.result as string;
+        setBgImage(dataUrl);
+        setBgInput(dataUrl);
+        localStorage.setItem("estandard-flash-bg", dataUrl);
+        setBgStatus(
+          "⚠ Storage upload амжилтгүй (" +
+            (e instanceof Error ? e.message : "алдаа") +
+            ") — зөвхөн энэ browser-д харагдана. 'marketing' bucket үүсгэсэн эсэхийг шалгана уу."
+        );
+        setBgSaving(false);
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+    setBgSaving(false);
   }
 
   if (dismissed || !visible) return null;
@@ -202,6 +273,11 @@ export function SurpriseSpotlight() {
                   <span className="text-xs font-semibold">Зураг тохируулах (админ)</span>
                   <button onClick={() => setShowBgSettings(false)} className="text-xs text-muted-foreground hover:text-foreground">✕ хаах</button>
                 </div>
+                {bgStatus && (
+                  <div className="rounded-xl border bg-muted px-3 py-2 text-[11px] leading-4">
+                    {bgStatus}
+                  </div>
+                )}
                 <div className="flex gap-2">
                   <input
                     value={bgInput}
@@ -211,9 +287,10 @@ export function SurpriseSpotlight() {
                   />
                   <button
                     onClick={() => applyBg(bgInput)}
-                    className="rounded-full royal-gradient px-4 py-1.5 text-xs font-semibold text-white"
+                    disabled={bgSaving}
+                    className="rounded-full royal-gradient px-4 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
                   >
-                    Хадгалах
+                    {bgSaving ? "Хадгалж..." : "Нийтэд хадгалах"}
                   </button>
                 </div>
                 <div className="flex gap-1.5 overflow-x-auto pb-1">
@@ -227,29 +304,26 @@ export function SurpriseSpotlight() {
                       <img src={url} alt="" className="h-full w-full object-cover" />
                     </button>
                   ))}
-                  <label className="flex h-10 w-14 shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed bg-muted text-xs hover:bg-muted/80">
+                  <label className={`flex h-10 w-14 shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed bg-muted text-xs hover:bg-muted/80 ${bgSaving ? "pointer-events-none opacity-50" : ""}`}>
                     + Файл
                     <input
                       type="file"
                       accept="image/*"
                       className="hidden"
+                      disabled={bgSaving}
                       onChange={(e) => {
                         const f = e.target.files?.[0];
                         if (!f) return;
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          const dataUrl = reader.result as string;
-                          setBgInput(dataUrl);
-                          applyBg(dataUrl);
-                        };
-                        reader.readAsDataURL(f);
+                        setBgInput("");
+                        handleFileUpload(f);
+                        e.target.value = "";
                       }}
                     />
                   </label>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => { setBgImage(DEFAULT_BG); setBgInput(DEFAULT_BG); localStorage.removeItem("estandard-flash-bg"); }} className="text-xs text-muted-foreground hover:text-foreground">Анхны болгох</button>
-                  <span className="text-xs text-muted-foreground">• Админ горим • localStorage хадгалагдана</span>
+                  <button onClick={() => applyBg(DEFAULT_BG)} disabled={bgSaving} className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-50">Анхны болгох</button>
+                  <span className="text-xs text-muted-foreground">• Админ горим • Supabase нийтэд хадгалагдана</span>
                 </div>
               </div>
             )}
