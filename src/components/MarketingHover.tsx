@@ -15,10 +15,7 @@ export function SurpriseSpotlight() {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (localStorage.getItem("estandard-surprise-dismissed")) {
-      setDismissed(true);
-      return;
-    }
+    // Refresh бүрд дахин гарч ирнэ — localStorage шалгахгүй
     const t = setTimeout(() => setVisible(true), 1500);
     return () => clearTimeout(t);
   }, []);
@@ -44,7 +41,6 @@ export function SurpriseSpotlight() {
   function handleDismiss() {
     setDismissed(true);
     setExpanded(false);
-    localStorage.setItem("estandard-surprise-dismissed", "1");
   }
 
   function handleMouseMove(e: React.MouseEvent) {
@@ -152,11 +148,14 @@ export function SurpriseSpotlight() {
           {/* Background image */}
           <img alt="promo bg" src={bgImage} className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--royal)]/90 via-[var(--royal)]/60 to-[var(--royal)]/20" />
-          {/* Content */}
+          {/* Content — vivid dynamic */}
           <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-2xl shadow-lg">◆</div>
-            <h4 className="mt-4 text-2xl font-black tracking-tight">БАЯР ХҮРГЭЕ!</h4>
-            <div className="mt-1 h-1 w-10 rounded-full bg-[var(--royal-gold)]" />
+            <h4
+              className="bg-gradient-to-r from-[var(--royal-gold)] via-[#fff8d6] to-[var(--royal-gold)] bg-clip-text text-3xl font-black tracking-tight text-transparent drop-shadow-[0_0_18px_rgba(197,164,106,0.8)] md:text-4xl"
+              style={{ backgroundSize: "200% 100%", animation: "goldShimmer 2s linear infinite, vividPulse 1.2s ease-in-out infinite" }}
+            >
+              БАЯР ХҮРГЭЕ!
+            </h4>
             <p className="mt-3 max-w-sm text-sm leading-6 text-slate-200">estandard.mn — таны байгууллага ISO нэгдсэн удирдлагын тогтолцоонд нэг алхам ойртлоо. Итгэл, чанар, тогтвортой хөгжил!</p>
             <div className="mt-4 flex gap-2 text-xs">
               <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
@@ -235,7 +234,7 @@ export function SurpriseSpotlight() {
         </div>
       </div>
 
-      <style>{`@keyframes float { 0%,100% { transform: translateY(0)} 50% { transform: translateY(-6px)} } @keyframes shimmer { 0% { transform: translateX(-100%)} 100% { transform: translateX(100%)} }`}</style>
+      <style>{`@keyframes float { 0%,100% { transform: translateY(0)} 50% { transform: translateY(-6px)} } @keyframes shimmer { 0% { transform: translateX(-100%)} 100% { transform: translateX(100%)} } @keyframes goldShimmer { 0% { background-position: -200% 0 } 100% { background-position: 200% 0 } } @keyframes vividPulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.05) } }`}</style>
     </div>
   );
 }
