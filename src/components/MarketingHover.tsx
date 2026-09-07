@@ -2,11 +2,16 @@
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 
+const DEFAULT_BG = "https://images.unsplash.com/photo-1454165205744-3b78555e5572?w=800&q=80&auto=format&fit=crop";
+
 export function SurpriseSpotlight() {
   const [expanded, setExpanded] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [visible, setVisible] = useState(false);
   const [flashOpen, setFlashOpen] = useState(false);
+  const [bgImage, setBgImage] = useState(DEFAULT_BG);
+  const [bgInput, setBgInput] = useState("");
+  const [showBgSettings, setShowBgSettings] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,6 +21,14 @@ export function SurpriseSpotlight() {
     }
     const t = setTimeout(() => setVisible(true), 1500);
     return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("estandard-flash-bg");
+    if (saved) {
+      setBgImage(saved);
+      setBgInput(saved);
+    }
   }, []);
 
   useEffect(() => {
@@ -44,6 +57,12 @@ export function SurpriseSpotlight() {
   function handleMouseLeave() {
     if (cardRef.current) cardRef.current.style.transform = "perspective(800px) rotateY(0) rotateX(0) scale(1)";
     setExpanded(false);
+  }
+
+  function applyBg(url: string) {
+    if (!url.trim()) return;
+    setBgImage(url.trim());
+    localStorage.setItem("estandard-flash-bg", url.trim());
   }
 
   if (dismissed || !visible) return null;
@@ -75,17 +94,16 @@ export function SurpriseSpotlight() {
           <button onClick={handleDismiss} className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs hover:bg-white/30">✕</button>
           {/* Flash icon — second window trigger */}
           <button
-            onClick={() => setFlashOpen((v) => !v)}
-            className="absolute left-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--royal-gold)] text-[var(--royal)] shadow-lg ring-2 ring-white/30 hover:scale-110 transition-transform"
+            onClick={() => setFlashOpen(true)}
+            className="absolute left-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--royal-gold)] text-[var(--royal)] shadow-lg ring-2 ring-white/30 hover:scale-110 transition-transform animate-pulse"
             title="Flash — зураг дэлгэх"
             aria-label="Flash image"
           >
-            <span className="text-sm animate-pulse">⚡</span>
+            <span className="text-sm">⚡</span>
           </button>
           <div className="ml-8 inline-flex items-center gap-1.5 rounded-full bg-[var(--royal-gold)] px-2.5 py-1 text-[11px] font-bold text-[var(--royal)]">✦ INNOVATION DROP ✦</div>
           <h3 className="mt-3 text-lg font-bold leading-tight">AI-аар ISO нэвтрүүлэлт<br /><span className="text-[var(--royal-gold-light)]">70% хурдан</span> — сюрприз!</h3>
           <p className="mt-2 text-xs leading-5 text-slate-200">Эхний 10 байгууллагад GAP үнэлгээ + эрсдэлийн матриц <b className="text-white">үнэгүй</b>. Hover хийхэд 3D tilt, confetti!</p>
-          {/* confetti dots */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             {[...Array(6)].map((_, i) => (
               <span key={i} className="absolute h-1.5 w-1.5 rounded-full bg-[var(--royal-gold)] opacity-70" style={{ left: `${15 + i * 14}%`, top: `${20 + (i % 2) * 40}%`, animation: `float ${2 + i * 0.3}s ease-in-out infinite` }} />
@@ -117,36 +135,103 @@ export function SurpriseSpotlight() {
             <Link href="/dashboard" onClick={handleDismiss} className="flex-1 rounded-full royal-gradient px-4 py-2.5 text-center text-sm font-semibold text-white shadow hover:opacity-90">Сюрприз авах →</Link>
             <button onClick={handleDismiss} className="rounded-full border bg-card px-4 py-2.5 text-sm hover:bg-muted">Хаах</button>
           </div>
-          <div className="mt-3 text-center text-[11px] text-muted-foreground">Hover → 3D • ⚡ Flash → зураг • Tap → нээх</div>
+          <div className="mt-3 text-center text-[11px] text-muted-foreground">⚡ Flash → зураг • Hover → 3D</div>
         </div>
       </div>
 
-      {/* Flash dot → image window — smooth scale + opacity */}
-      <div className={`pointer-events-none fixed inset-0 z-[60] flex items-center justify-center ${flashOpen ? "pointer-events-auto" : ""}`}>
-        <div onClick={() => setFlashOpen(false)} className={`absolute inset-0 bg-[var(--royal)]/40 backdrop-blur-sm transition-opacity duration-500 ${flashOpen ? "opacity-100" : "opacity-0"}`} />
+      {/* Flash dot → image window — smooth scale + opacity, dissolves into flash icon */}
+      <div className={`fixed inset-0 z-[60] flex items-center justify-center ${flashOpen ? "pointer-events-auto" : "pointer-events-none"}`}>
         <div
-          className={`relative overflow-hidden rounded-2xl border bg-card shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${flashOpen ? "scale-100 opacity-100 w-[90vw] max-w-[560px] h-[340px] md:h-[420px]" : "scale-0 opacity-0 w-2 h-2"}`}
-          style={{ transformOrigin: "center" }}
+          onClick={() => setFlashOpen(false)}
+          className={`absolute inset-0 bg-[var(--royal)]/50 backdrop-blur-sm transition-opacity duration-500 ease-out ${flashOpen ? "opacity-100" : "opacity-0"}`}
+        />
+        <div
+          className={`relative overflow-hidden rounded-2xl border shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${flashOpen ? "w-[92vw] max-w-[560px] h-[360px] md:h-[440px] scale-100 opacity-100" : "w-[92vw] max-w-[560px] h-[360px] md:h-[440px] scale-0 opacity-0"}`}
+          style={{ transformOrigin: "calc(50% + 40vw - 80px) calc(50% + 40vh - 80px)" }}
         >
-          {/* Image content */}
-          <div className="absolute inset-0 royal-gradient flex flex-col items-center justify-center p-6 text-white">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-2xl shadow">◆</div>
-            <h4 className="mt-4 text-xl font-bold">estandard.mn</h4>
-            <p className="mt-1 text-sm text-[var(--royal-gold-light)]">Royal IMS — Итгэл • Чанар • Тогтвортой хөгжил</p>
-            <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
-              <span className="rounded-full bg-white/15 px-2 py-1">ISO 9001</span>
-              <span className="rounded-full bg-white/15 px-2 py-1">14001</span>
-              <span className="rounded-full bg-white/15 px-2 py-1">45001</span>
+          {/* Background image */}
+          <img alt="promo bg" src={bgImage} className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--royal)]/90 via-[var(--royal)]/60 to-[var(--royal)]/20" />
+          {/* Content */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-2xl shadow-lg">◆</div>
+            <h4 className="mt-4 text-2xl font-black tracking-tight">БАЯР ХҮРГЭЕ!</h4>
+            <div className="mt-1 h-1 w-10 rounded-full bg-[var(--royal-gold)]" />
+            <p className="mt-3 max-w-sm text-sm leading-6 text-slate-200">estandard.mn — таны байгууллага ISO нэгдсэн удирдлагын тогтолцоонд нэг алхам ойртлоо. Итгэл, чанар, тогтвортой хөгжил!</p>
+            <div className="mt-4 flex gap-2 text-xs">
+              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
+              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">14001</span>
+              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">45001</span>
             </div>
-            <p className="mt-4 max-w-sm text-center text-xs leading-5 text-slate-300">Зураг цэгээс → томрохдоо opacity 0% → 100%, хураагдахдаа 100% → 0% smooth.</p>
           </div>
-          <img
-            alt="promo"
-            src="https://images.unsplash.com/photo-1454165205744-3b78555e5572?w=800&q=80&auto=format&fit=crop"
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
-          />
-          <button onClick={() => setFlashOpen(false)} className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur hover:bg-black/60">✕</button>
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-[var(--royal-gold)] px-3 py-1 text-xs font-bold text-[var(--royal)]">⚡ Flash • дахин дарж хураах</div>
+          {/* Close X */}
+          <button onClick={() => setFlashOpen(false)} className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur hover:bg-black/60 transition">✕</button>
+
+          {/* Background image settings */}
+          <div className="absolute bottom-0 left-0 right-0 border-t bg-card/95 p-3 backdrop-blur">
+            {!showBgSettings ? (
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-medium">🖼 Арын зураг</span>
+                <button onClick={() => setShowBgSettings(true)} className="rounded-full border bg-card px-3 py-1 text-xs hover:bg-muted">Солих ⚙</button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold">Зураг тохируулах</span>
+                  <button onClick={() => setShowBgSettings(false)} className="text-xs text-muted-foreground hover:text-foreground">✕ хаах</button>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    value={bgInput}
+                    onChange={(e) => setBgInput(e.target.value)}
+                    placeholder="https://... зураг URL"
+                    className="flex-1 rounded-full border bg-background px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-[var(--royal-gold)]"
+                  />
+                  <button
+                    onClick={() => applyBg(bgInput)}
+                    className="rounded-full royal-gradient px-4 py-1.5 text-xs font-semibold text-white"
+                  >
+                    Хадгалах
+                  </button>
+                </div>
+                <div className="flex gap-1.5 overflow-x-auto pb-1">
+                  {[
+                    "https://images.unsplash.com/photo-1454165205744-3b78555e5572?w=800&q=80&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80&auto=format&fit=crop",
+                  ].map((url) => (
+                    <button key={url} onClick={() => { setBgInput(url); applyBg(url); }} className={`h-10 w-14 shrink-0 overflow-hidden rounded-lg border-2 ${bgImage === url ? "border-[var(--royal-gold)]" : "border-transparent"}`}>
+                      <img src={url} alt="" className="h-full w-full object-cover" />
+                    </button>
+                  ))}
+                  <label className="flex h-10 w-14 shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed bg-muted text-xs hover:bg-muted/80">
+                    + Файл
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (!f) return;
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          const dataUrl = reader.result as string;
+                          setBgInput(dataUrl);
+                          applyBg(dataUrl);
+                        };
+                        reader.readAsDataURL(f);
+                      }}
+                    />
+                  </label>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setBgImage(DEFAULT_BG); setBgInput(DEFAULT_BG); localStorage.removeItem("estandard-flash-bg"); }} className="text-xs text-muted-foreground hover:text-foreground">Анхны болгох</button>
+                  <span className="text-xs text-muted-foreground">• Зураг томрохдоо 0%→100%, хураагдахдаа 100%→0% smooth</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
