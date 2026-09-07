@@ -46,7 +46,7 @@ export default function Home() {
               <div className="rounded-2xl border border-[var(--royal-gold)]/20 bg-card p-5 shadow-2xl md:p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-semibold">IMS Хяналт</h3>
-                  <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300">● Амьд</span>
+                  <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300">● Шууд</span>
                 </div>
                 <div className="mt-5 grid grid-cols-3 gap-2 md:gap-3">
                   <div className="rounded-xl bg-muted p-3 text-center">
