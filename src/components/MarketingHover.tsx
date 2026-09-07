@@ -6,6 +6,7 @@ export function SurpriseSpotlight() {
   const [expanded, setExpanded] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [flashOpen, setFlashOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -72,7 +73,16 @@ export function SurpriseSpotlight() {
         <div className="relative royal-gradient p-5 text-white">
           <div className="absolute inset-0 opacity-30" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)", animation: "shimmer 2s infinite" }} />
           <button onClick={handleDismiss} className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-xs hover:bg-white/30">✕</button>
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--royal-gold)] px-2.5 py-1 text-[11px] font-bold text-[var(--royal)]">✦ INNOVATION DROP ✦</div>
+          {/* Flash icon — second window trigger */}
+          <button
+            onClick={() => setFlashOpen((v) => !v)}
+            className="absolute left-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--royal-gold)] text-[var(--royal)] shadow-lg ring-2 ring-white/30 hover:scale-110 transition-transform"
+            title="Flash — зураг дэлгэх"
+            aria-label="Flash image"
+          >
+            <span className="text-sm animate-pulse">⚡</span>
+          </button>
+          <div className="ml-8 inline-flex items-center gap-1.5 rounded-full bg-[var(--royal-gold)] px-2.5 py-1 text-[11px] font-bold text-[var(--royal)]">✦ INNOVATION DROP ✦</div>
           <h3 className="mt-3 text-lg font-bold leading-tight">AI-аар ISO нэвтрүүлэлт<br /><span className="text-[var(--royal-gold-light)]">70% хурдан</span> — сюрприз!</h3>
           <p className="mt-2 text-xs leading-5 text-slate-200">Эхний 10 байгууллагад GAP үнэлгээ + эрсдэлийн матриц <b className="text-white">үнэгүй</b>. Hover хийхэд 3D tilt, confetti!</p>
           {/* confetti dots */}
@@ -107,7 +117,36 @@ export function SurpriseSpotlight() {
             <Link href="/dashboard" onClick={handleDismiss} className="flex-1 rounded-full royal-gradient px-4 py-2.5 text-center text-sm font-semibold text-white shadow hover:opacity-90">Сюрприз авах →</Link>
             <button onClick={handleDismiss} className="rounded-full border bg-card px-4 py-2.5 text-sm hover:bg-muted">Хаах</button>
           </div>
-          <div className="mt-3 text-center text-[11px] text-muted-foreground">Hover → 3D • Tap → нээх • 1 удаа л гарна</div>
+          <div className="mt-3 text-center text-[11px] text-muted-foreground">Hover → 3D • ⚡ Flash → зураг • Tap → нээх</div>
+        </div>
+      </div>
+
+      {/* Flash dot → image window — smooth scale + opacity */}
+      <div className={`pointer-events-none fixed inset-0 z-[60] flex items-center justify-center ${flashOpen ? "pointer-events-auto" : ""}`}>
+        <div onClick={() => setFlashOpen(false)} className={`absolute inset-0 bg-[var(--royal)]/40 backdrop-blur-sm transition-opacity duration-500 ${flashOpen ? "opacity-100" : "opacity-0"}`} />
+        <div
+          className={`relative overflow-hidden rounded-2xl border bg-card shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${flashOpen ? "scale-100 opacity-100 w-[90vw] max-w-[560px] h-[340px] md:h-[420px]" : "scale-0 opacity-0 w-2 h-2"}`}
+          style={{ transformOrigin: "center" }}
+        >
+          {/* Image content */}
+          <div className="absolute inset-0 royal-gradient flex flex-col items-center justify-center p-6 text-white">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-2xl shadow">◆</div>
+            <h4 className="mt-4 text-xl font-bold">estandard.mn</h4>
+            <p className="mt-1 text-sm text-[var(--royal-gold-light)]">Royal IMS — Итгэл • Чанар • Тогтвортой хөгжил</p>
+            <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+              <span className="rounded-full bg-white/15 px-2 py-1">ISO 9001</span>
+              <span className="rounded-full bg-white/15 px-2 py-1">14001</span>
+              <span className="rounded-full bg-white/15 px-2 py-1">45001</span>
+            </div>
+            <p className="mt-4 max-w-sm text-center text-xs leading-5 text-slate-300">Зураг цэгээс → томрохдоо opacity 0% → 100%, хураагдахдаа 100% → 0% smooth.</p>
+          </div>
+          <img
+            alt="promo"
+            src="https://images.unsplash.com/photo-1454165205744-3b78555e5572?w=800&q=80&auto=format&fit=crop"
+            className="absolute inset-0 h-full w-full object-cover opacity-20"
+          />
+          <button onClick={() => setFlashOpen(false)} className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur hover:bg-black/60">✕</button>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-[var(--royal-gold)] px-3 py-1 text-xs font-bold text-[var(--royal)]">⚡ Flash • дахин дарж хураах</div>
         </div>
       </div>
 
