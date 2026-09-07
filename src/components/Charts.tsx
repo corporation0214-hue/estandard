@@ -83,8 +83,8 @@ export function RiskMatrix() {
             </div>
           ))}
           {cells.map((row, i) => (
-            <>
-              <div key={`r-${i}`} className="flex items-center justify-center font-medium text-muted-foreground">
+            <div key={`row-${i}`} className="contents">
+              <div className="flex items-center justify-center font-medium text-muted-foreground">
                 {5 - i}
               </div>
               {row.map((v, j) => (
@@ -101,7 +101,7 @@ export function RiskMatrix() {
                   {v}
                 </div>
               ))}
-            </>
+            </div>
           ))}
         </div>
         <div className="mt-2 flex justify-between text-[10px] text-muted-foreground">
