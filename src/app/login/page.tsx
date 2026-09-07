@@ -43,6 +43,22 @@ export default function LoginPage() {
     }
   }
 
+  async function handleResetPassword() {
+    if (!email) {
+      setErr("Эхлээд имэйлээ оруулна уу, дараа нь сэргээх дарна");
+      return;
+    }
+    setLoading(true);
+    setErr(null);
+    setMsg(null);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+    });
+    setLoading(false);
+    if (error) setErr(error.message);
+    else setMsg(`Сэргээх холбоос ${email} руу илгээлээ. Имэйл доторх холбоосоор орж шинэ нууц үгээ үүсгэнэ. (Invitation-д мөн адил)`);
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 border-b bg-card/80 backdrop-blur">
@@ -97,6 +113,12 @@ export default function LoginPage() {
               {loading ? "Түр хүлээнэ үү..." : mode === "login" ? "Нэвтрэх →" : "Бүртгүүлэх"}
             </button>
           </form>
+
+          <div className="mt-2 text-center">
+            <button type="button" onClick={handleResetPassword} className="text-xs text-amber-700 hover:underline dark:text-amber-300">
+              Нууц үг мартсан / Invitation? — Сэргээх холбоос илгээх
+            </button>
+          </div>
 
           <div className="mt-4 flex items-center justify-between text-xs">
             <button onClick={() => setMode(mode === "login" ? "signup" : "login")} className="text-[var(--royal)] hover:underline dark:text-[var(--royal-gold)]">
