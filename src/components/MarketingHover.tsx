@@ -236,20 +236,22 @@ export function SurpriseSpotlight() {
           {/* Background image */}
           <img alt="promo bg" src={bgImage} className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--royal)]/90 via-[var(--royal)]/60 to-[var(--royal)]/20" />
-          {/* Content — vivid dynamic */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white">
+          {/* Content — vivid dynamic, title at top */}
+          <div className="absolute inset-0 flex flex-col items-center p-6 pt-12 text-center text-white">
             <h4
               className="bg-gradient-to-r from-[var(--royal-gold)] via-[#fff8d6] to-[var(--royal-gold)] bg-clip-text text-3xl font-black tracking-tight text-transparent drop-shadow-[0_0_18px_rgba(197,164,106,0.8)] md:text-4xl"
               style={{ backgroundSize: "200% 100%", animation: "goldShimmer 2s linear infinite, vividPulse 1.2s ease-in-out infinite" }}
             >
               БАЯР ХҮРГЭЕ!
             </h4>
-            <p className="mt-3 max-w-sm text-sm leading-6 text-slate-200">estandard.mn — таны байгууллага ISO нэгдсэн удирдлагын тогтолцоонд нэг алхам ойртлоо. Итгэл, чанар, тогтвортой хөгжил!</p>
-            <div className="mt-4 flex flex-wrap justify-center gap-1.5 text-xs">
-              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
-              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 14001</span>
-              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 45001</span>
-              <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur border border-[var(--royal-gold)]/40">ISO 19011</span>
+            <div className="flex flex-1 flex-col items-center justify-center">
+              <p className="max-w-sm text-sm leading-6 text-slate-200">estandard.mn — таны байгууллага ISO нэгдсэн удирдлагын тогтолцоонд нэг алхам ойртлоо. Итгэл, чанар, тогтвортой хөгжил!</p>
+              <div className="mt-4 flex flex-wrap justify-center gap-1.5 text-xs">
+                <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
+                <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 14001</span>
+                <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 45001</span>
+                <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur border border-[var(--royal-gold)]/40">ISO 19011</span>
+              </div>
             </div>
           </div>
           {/* Close X */}
