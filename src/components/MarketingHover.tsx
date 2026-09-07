@@ -247,8 +247,7 @@ export function SurpriseSpotlight() {
           {/* Content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white">
             <div className="flex flex-col items-center justify-center">
-              <p className="max-w-sm text-sm leading-6 text-slate-200">estandard.mn — таны байгууллага ISO нэгдсэн удирдлагын тогтолцоонд нэг алхам ойртлоо. Итгэл, чанар, тогтвортой хөгжил!</p>
-              <div className="mt-4 flex flex-wrap justify-center gap-1.5 text-xs">
+              <div className="flex flex-wrap justify-center gap-1.5 text-xs">
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 9001</span>
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 14001</span>
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 45001</span>
@@ -256,6 +255,7 @@ export function SurpriseSpotlight() {
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur">ISO 31000</span>
                 <span className="rounded-full bg-white/20 px-3 py-1 backdrop-blur border border-[var(--royal-gold)]/40">ISO 19011</span>
               </div>
+              <p className="mt-4 max-w-sm text-sm leading-6 text-slate-200">estandard.mn — таны байгууллага ISO нэгдсэн удирдлагын тогтолцоонд нэг алхам ойртлоо. Итгэл, чанар, тогтвортой хөгжил!</p>
             </div>
           </div>
           {/* Close X */}
