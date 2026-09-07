@@ -4,14 +4,42 @@ import { STANDARDS } from "@/lib/standards";
 export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="border-b bg-white">
+      <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
-          <Link href="/" className="text-sm font-bold">
-            ESTANDARD<span className="text-blue-700">.MN</span>
-          </Link>
-          <span className="rounded-full bg-slate-900 px-3 py-1 text-xs text-white">
-            Demo • Supabase холбоогүй (env тохируулна)
-          </span>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-2 text-sm font-bold">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-700 text-xs font-bold text-white">
+                E
+              </span>
+              ESTANDARD<span className="text-blue-700">.MN</span>
+            </Link>
+            <Link
+              href="/"
+              className="hidden items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 md:inline-flex"
+            >
+              ← Нүүр хуудас
+            </Link>
+          </div>
+          <nav className="hidden items-center gap-5 text-sm md:flex">
+            <Link href="/" className="text-slate-600 hover:text-slate-900">
+              Нүүр
+            </Link>
+            <Link href="/standards" className="text-slate-600 hover:text-slate-900">
+              Стандартууд
+            </Link>
+            <span className="font-medium text-blue-700">Самбар</span>
+          </nav>
+          <div className="flex items-center gap-2">
+            <span className="hidden items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-200 md:inline-flex">
+              ● Холбогдсон — Supabase
+            </span>
+            <Link
+              href="/"
+              className="rounded-full bg-slate-900 px-4 py-1.5 text-xs font-medium text-white hover:bg-slate-800 md:hidden"
+            >
+              ← Нүүр
+            </Link>
+          </div>
         </div>
       </header>
 
